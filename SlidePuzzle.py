@@ -1,4 +1,6 @@
-import os
+import os, random
+symbols = []
+
 
 class symbol:
 
@@ -14,46 +16,95 @@ def clear():
         os.system("clear")
 
 
-s1 = symbol(1, 1, "1")
-s2 = symbol(2, 1, "7")
-s3 = symbol(3, 1, "3")
+def fix(i):
+    p1 = i.rstrip()
+    p2 = p1.lstrip()
+    return p2
 
-s4 = symbol(1, 2, "4")
-s5 = symbol(2, 2, "*")
-s6 = symbol(3, 2, "6")
+def generate():
 
-s7 = symbol(1, 3, "2")
-s8 = symbol(2, 3, "8")
-s9 = symbol(3, 3, "5")
+    global symbols
+    defSymbols = ["1", "2", "3", "4", "5", "6", "7", "8", "*"]
 
-symbols = []
+    c1 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    s1 = symbol(1, 1, fix(c1))
+    defSymbols.remove(c1)
 
-symbols.append(s1)
-symbols.append(s2)
-symbols.append(s3)
+    c2 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    s2 = symbol(2, 1, fix(c2))
+    defSymbols.remove(c2)
 
-symbols.append(s4)
-symbols.append(s5)
-symbols.append(s6)
+    c3 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    s3 = symbol(3, 1, fix(c3))
+    defSymbols.remove(c3)
 
-symbols.append(s7)
-symbols.append(s8)
-symbols.append(s9)
+
+
+    c4 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    s4 = symbol(1, 2, fix(c4))
+    defSymbols.remove(c4)
+
+    c5 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    s5 = symbol(2, 2, fix(c5))
+    defSymbols.remove(c5)
+
+    c6 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    s6 = symbol(3, 2, fix(c6))
+    defSymbols.remove(c6)
+
+
+
+    c7 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    s7 = symbol(1, 3, fix(c7))
+    defSymbols.remove(c7)
+
+    c8 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    s8 = symbol(2, 3, fix(c8))
+    defSymbols.remove(c8)
+
+    c9 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    s9 = symbol(3, 3, fix(c9))
+    defSymbols.remove(c9)
+
+
+    symbols.append(s1)
+    symbols.append(s2)
+    symbols.append(s3)
+
+    symbols.append(s4)
+    symbols.append(s5)
+    symbols.append(s6)
+
+    symbols.append(s7)
+    symbols.append(s8)
+    symbols.append(s9)
+
+
+def cleanup():
+    global symbols
+    symbols.clear()
+    
+
 
 
 def p(element, element2, element3):
 
-    global symbols
+    #global symbols
     print(f"  {element.val}   {element2.val}   {element3.val}")
     print("")
 
 
 def draw():
     print("")
-    p(s1, s2, s3)
-    p(s4, s5, s6)
-    p(s7, s8, s9)
-
+    #p(s1, s2, s3)
+    #p(s4, s5, s6)
+    #p(s7, s8, s9)
+    print(f"  {symbols[0].val}   {symbols[1].val}   {symbols[2].val}")
+    print("")
+    print(f"  {symbols[3].val}   {symbols[4].val}   {symbols[5].val}")
+    print("")
+    print(f"  {symbols[6].val}   {symbols[7].val}   {symbols[8].val}")
+    print("")
 
 def getPos():
     xPos = 0
@@ -146,25 +197,31 @@ def right():
         #cannot go any further to the right
 
 
-
+generate()
 draw()
 run = True
 while run:
     c = input(">")
     if len(c) == 0:
         pass
-    elif c == "up" or c == "u":
+    elif c == "up" or c == "w":
         up()
         
-    elif c == "down" or c == "d":
+    elif c == "down" or c == "s":
         down()
 
-    elif c == "left" or c == "l":
+    elif c == "left" or c == "a":
         left()
 
-    elif c == "right" or c == "r":
+    elif c == "right" or c == "d":
         right()
         
+    elif c == "new" or c == "reload":
+        cleanup()
+        clear()
+        generate()
+        draw()
+
     else:
         pass
     
