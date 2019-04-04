@@ -1,5 +1,6 @@
 import os, random
 symbols = []
+solves = 0
 
 
 class symbol:
@@ -200,9 +201,23 @@ clear()
 draw()
 run = True
 while run:
+
+    if symbols[0].val == "1" and symbols[1].val == "2" and symbols[2].val == "3" and symbols[3].val == "4" and symbols[4].val == "5" and symbols[5].val == "6" and symbols[6].val == "7" and symbols[7].val == "8" and symbols[8].val == "*":
+        solves +=1
+        cleanup()
+        clear()
+        generate()
+        scramble()
+        draw()
+
+    
+    print(f"  Solved: {solves}")
+    print("")
+    
     c = input(">")
     if len(c) == 0:
-        pass
+        clear()
+        draw()
     elif c == "up" or c == "w":
         up()
         clear()
@@ -231,6 +246,7 @@ while run:
         draw()
 
     else:
-        pass
+        clear()
+        draw()
     
 
