@@ -24,47 +24,49 @@ def fix(i):
 def generate():
 
     global symbols
-    defSymbols = ["1", "2", "3", "4", "5", "6", "7", "8", "*"]
+    row1 = ["1", "2", "3"]
+    row2 = ["4", "5", "6"]
+    row3 = ["7", "8", "*"]
 
-    c1 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    c1 = row1[random.randint(0, len(row1)-1)]
     s1 = symbol(1, 1, fix(c1))
-    defSymbols.remove(c1)
+    row1.remove(c1)
 
-    c2 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    c2 = row1[random.randint(0, len(row1)-1)]
     s2 = symbol(2, 1, fix(c2))
-    defSymbols.remove(c2)
+    row1.remove(c2)
 
-    c3 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    c3 = row1[random.randint(0, len(row1)-1)]
     s3 = symbol(3, 1, fix(c3))
-    defSymbols.remove(c3)
+    row1.remove(c3)
 
 
 
-    c4 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    c4 = row2[random.randint(0, len(row2)-1)]
     s4 = symbol(1, 2, fix(c4))
-    defSymbols.remove(c4)
+    row2.remove(c4)
 
-    c5 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    c5 = row2[random.randint(0, len(row2)-1)]
     s5 = symbol(2, 2, fix(c5))
-    defSymbols.remove(c5)
+    row2.remove(c5)
 
-    c6 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    c6 = row2[random.randint(0, len(row2)-1)]
     s6 = symbol(3, 2, fix(c6))
-    defSymbols.remove(c6)
+    row2.remove(c6)
 
 
 
-    c7 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    c7 = row3[random.randint(0, len(row3)-1)]
     s7 = symbol(1, 3, fix(c7))
-    defSymbols.remove(c7)
+    row3.remove(c7)
 
-    c8 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    c8 = row3[random.randint(0, len(row3)-1)]
     s8 = symbol(2, 3, fix(c8))
-    defSymbols.remove(c8)
+    row3.remove(c8)
 
-    c9 = defSymbols[random.randint(0, len(defSymbols)-1)]
+    c9 = row3[random.randint(0, len(row3)-1)]
     s9 = symbol(3, 3, fix(c9))
-    defSymbols.remove(c9)
+    row3.remove(c9)
 
 
     symbols.append(s1)
