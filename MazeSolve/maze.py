@@ -13,10 +13,8 @@ class pixel():
         self.y = y
         self.rgba = rgba
 
-        if self.rgba == (255, 255, 255, 255):
+        if self.rgba == (255, 255, 255, 255) or self.rgba == (255, 255, 255):
             self.white = True
-        elif self.rgba != (255, 255, 255, 255):
-            self.white = False
 
 def find_pixel(x, y):
 
@@ -36,7 +34,7 @@ def find_junctions(width, height):
     #and so on...
     
     for s in pixels:
-        if s.y == 0 and s.white == True:
+        if s.y == 0 and s.x > 0 and s.white:
             start.x, start.y, start.rgba = s.x, s.y, s.rgba
         else:
             pass
@@ -95,7 +93,15 @@ def find_junctions(width, height):
 def scan():
     maze = Image.open("maze.png")
 
+
     width, height = maze.width, maze.height
+    if os.path.isfile("maze_enlarged.png"):
+        pass
+    else:
+        maze_enlarged = maze.resize((width*100, height*100))
+        maze_enlarged.save("maze_enlarged.png")
+
+
     print(f"Scanning maze.png with a size of ({width}, {height})")
     output = Image.new("RGB", (width, height), 0)
 
@@ -128,7 +134,8 @@ def scan():
             if os.path.isfile("maze_solved.png"):
                 os.remove("maze_solved.png")
             
-            output.save("maze_solved.png")
+            sized_output = output.resize((width*100, height*100))
+            sized_output.save("maze_solved.png")
                 
         else:
             pass
