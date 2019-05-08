@@ -2,7 +2,9 @@ import PIL, os
 from PIL import Image
 
 myColor = (66, 244, 173, 255)
-pixels, junctions = [], []
+dead_end = (244, 46, 46, 255)
+
+pixels, junctions, dead_ends = [], [], []
 
 class pixel():
 
@@ -85,7 +87,11 @@ def find_junctions(width, height):
             if v >= 1 and h >= 1:
                 junctions.append(a)
 
-            
+            elif v == 1 and h == 0 and a.y != (height-1):
+                dead_ends.append(a)
+
+            elif h == 1 and v == 0:
+                dead_ends.append(a)
             
         else:
             pass
@@ -116,14 +122,18 @@ def scan():
             
     find_junctions(width, height)
 
-    g = 0
+    junction_count = 0
     #compare pixels to junction pixels
-    for e in junctions:
-            output.putpixel((e.x, e.y), myColor)
-            g+= 1
+    for j in junctions:
+            output.putpixel((j.x, j.y), myColor)
+            junction_count += 1
     
+    dead_count = 0
+    for d in dead_ends:
+            output.putpixel((d.x, d.y), dead_end)
+            dead_count += 1
 
-    print(f"Pixels: {len(pixels)}, Junction pixels: {g}")
+    print(f"Pixels: {len(pixels)}, Junction pixels: {junction_count}, Dead ends: {dead_count}")
     choice = input("Do you want to save the solution? (y/n) ")
 
 
