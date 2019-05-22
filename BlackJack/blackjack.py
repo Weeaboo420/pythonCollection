@@ -72,10 +72,12 @@ def getScore():
 
 myCards = []
 dealerCards = []
+fast_forward = False
 
 def round():
     print("")
     global rounds
+    global fast_forward
 
     if rounds == 1:
             r1 = random.randint(0, len(deck)-1)
@@ -92,8 +94,17 @@ def round():
         print(f"Round {rounds}")
         print(f"Your score: {score}")
 
+
         c = True
-        while c:
+        if score >= 21:
+            c = False
+            print("You have enough score")
+            print("")
+            fast_forward = True
+
+
+
+        while c == True and fast_forward == False:
             choice = input("Do you want to draw another card from the deck (y/n)? ")
             if len(choice) > 0:
                 if choice.lower() == "y":
@@ -105,7 +116,7 @@ def round():
 
                 elif choice.lower() == "n":
                     c = False
-                    print("")
+                    fast_forward = True
 
                 else:
                     pass
@@ -149,7 +160,13 @@ def round():
         print(f"{len(dealerCards)} cards")
 
     print("")
-    input("Press ENTER to continue...")
+
+    if myScore >= 21:
+        pass
+
+    elif myScore != 21 and fast_forward == False:
+        input("Press ENTER to continue...")
+
     rounds += 1
     clear()
 
@@ -180,6 +197,7 @@ def play():
     global myCards
     global dealerCards
     global deck
+    global fast_forward
 
     deck = []
     rounds = 1
@@ -193,6 +211,11 @@ def play():
     myScore, dealerScore = getScore()
 
     clear()
+
+    if fast_forward == True:
+        print("[Game was fast-forwarded]")
+        print("")
+
     print("-Match Result-")
     print("")
 
@@ -234,6 +257,7 @@ def play():
     elif myFinal == dealerFinal:
         print("The game is a draw!")
 
+    fast_forward = False
 
 run = True
 games = 0
