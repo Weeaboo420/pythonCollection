@@ -37,7 +37,7 @@ print("")
 if len(args) > 1:
 
 	#check for the arg that specifies uppercase or not
-	if args[2]:
+	if len(args) >= 3:
 		try:
 			if args[2].lower() == "true":
 				capital = True
@@ -54,4 +54,11 @@ if len(args) > 1:
 		print(f"{spit(8)}-{spit(4)}-{spit(4)}-{spit(4)}-{spit(12)}")
 
 else:
-	print(f"{spit(8)}-{spit(4)}-{spit(4)}-{spit(4)}-{spit(12)}")
+	print("Usage: guid [n] [useCaps]]")
+	print("[n | 1 -> infinity] is the amount of guids you wish to create")
+	print("[useCaps | true, false] is a bool that forces all letters to be in caps")
+	print("")
+	print("Examples:")
+	print("guid 10 false --- return 10 guids in lowercase")
+	print("guid 3 true --- return 3 guids with uppercase")
+
