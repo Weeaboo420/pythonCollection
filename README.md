@@ -2,6 +2,9 @@
 A selection of scripts I am working on in my spare time
 
 
+# Game
+A basic rpg-like grid based game I am working on. I might dedicate a separate repo for it in the future.
+
 # BlackJack
 A simple game where you play blackjack, pretty self-explanatory.
 
