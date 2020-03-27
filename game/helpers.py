@@ -42,15 +42,15 @@ def getHealth(player):
         if player.currentHp == 0:
             health = "[   DEAD   ]" + suffix
 
-        return health
+        return classes.Colors.OKGREEN + health + classes.Colors.ENDC
     else:
         raise TypeError("ERROR: Argument \'player\' has to be of type \'Player\'!")
 
 def displayLegend(room):
     if type(room) is classes.Room:		
-        print(f"---[{room.name}]---")
+        print(f"---[{classes.Colors.WARNING}{room.name}{classes.Colors.ENDC}]---")
         print("")
-        print("P = Player, N = NPC")
+        print(f"{classes.Colors.OKGREEN}P = Player{classes.Colors.ENDC}, {classes.Colors.OKBLUE}N = NPC{classes.Colors.ENDC}")
         print("[w, a, s, d] + [RETURN] to move")
         print("")
         print(f"Your health: {getHealth(room.player)}")

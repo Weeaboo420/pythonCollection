@@ -3,17 +3,16 @@ from PIL import Image
 
 myColor = (66, 244, 173, 255)
 dead_end = (244, 46, 46, 255)
+blue = (66, 135, 245, 255)
 
 pixels, junctions, dead_ends = [], [], []
 
 class pixel():
-
-    white = False
-
     def __init__(self, x, y, rgba):
         self.x = x
         self.y = y
         self.rgba = rgba
+        self.white = False
 
         if self.rgba == (255, 255, 255, 255) or self.rgba == (255, 255, 255):
             self.white = True
@@ -26,7 +25,6 @@ def find_pixel(x, y):
         else:
             pass
 
-
 def find_junctions(width, height):
 
     start = pixel(0, 0, (0,0,0,0))
@@ -34,7 +32,6 @@ def find_junctions(width, height):
     #find the starting pixel which is the first white pixel
     #this method scans from left to right per row of pixels [x, y]: (0, 0) (1, 0) (2, 0)
     #and so on...
-    
     for s in pixels:
         if s.y == 0 and s.x > 0 and s.white:
             start.x, start.y, start.rgba = s.x, s.y, s.rgba
@@ -56,7 +53,7 @@ def find_junctions(width, height):
             if a.x > 0:
                 left = find_pixel(a.x-1, a.y)
                 if left.white == True:
-                    h += 1            
+                    h += 1
 
             if a.x < width:
                 right = find_pixel(a.x+1, a.y)
@@ -74,8 +71,7 @@ def find_junctions(width, height):
                 bottom = find_pixel(a.x, a.y+1)
 
                 if bottom is None:
-                    print(f"NoneType ({a.x}, {a.y})")
-                
+                    print(f"({a.x}, {a.y})")
                 elif bottom.white == True:
                     v += 1
 
@@ -92,7 +88,6 @@ def find_junctions(width, height):
 
             elif h == 1 and v == 0:
                 dead_ends.append(a)
-            
         else:
             pass
 
@@ -104,7 +99,7 @@ def scan():
     if os.path.isfile("maze_enlarged.png"):
         pass
     else:
-        maze_enlarged = maze.resize((width*100, height*100))
+        maze_enlarged = maze.resize((width*100, height*100), PIL.Image.NEAREST)
         maze_enlarged.save("maze_enlarged.png")
 
 
@@ -115,19 +110,22 @@ def scan():
     #scan and add all pixels to a list
     for y in range(0, height):
         for x in range(0, width):
-
             myPixel = pixel(x, y, maze.getpixel((x,y)))
             pixels.append(myPixel)
             output.putpixel((x, y), maze.getpixel((x, y)))
-            
-    find_junctions(width, height)
 
+	#make the first pixel blue
+    for px in pixels:
+        if px.y == 0 and px.x > 0 and px.white:
+            output.putpixel((px.x, px.y), blue)
+
+    find_junctions(width, height)
     junction_count = 0
     #compare pixels to junction pixels
     for j in junctions:
             output.putpixel((j.x, j.y), myColor)
             junction_count += 1
-    
+
     dead_count = 0
     for d in dead_ends:
             output.putpixel((d.x, d.y), dead_end)
@@ -136,17 +134,13 @@ def scan():
     print(f"Pixels: {len(pixels)}, Junction pixels: {junction_count}, Dead ends: {dead_count}")
     choice = input("Do you want to save the solution? (y/n) ")
 
-
-        
     if len(choice) > 0:
         if choice.lower() == "y" or choice.lower() == "yes":
 
             if os.path.isfile("maze_solved.png"):
                 os.remove("maze_solved.png")
-            
-            sized_output = output.resize((width*100, height*100))
+            sized_output = output.resize((width*100, height*100), PIL.Image.NEAREST)
             sized_output.save("maze_solved.png")
-                
         else:
             pass
     else:
