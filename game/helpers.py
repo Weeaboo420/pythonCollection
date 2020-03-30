@@ -1,8 +1,8 @@
 import os
 import classes
 
-def clear():
-	os.system("cls || clear")
+def clear():    
+    os.system("cls || clear")
 
 def getHealth(player):
     if type(player) is classes.Player:
@@ -35,17 +35,17 @@ def getHealth(player):
         raise TypeError("ERROR: Argument \'player\' has to be of type \'Player\'!")
 
 def displayLegend(room):
-	if type(room) is classes.Room:
-		print(f"---[{classes.Colors.WARNING}{room.name}{classes.Colors.ENDC}]---")
-		print("")
-		print(f"{classes.Colors.OKGREEN}P = Player{classes.Colors.ENDC}, {classes.Colors.OKBLUE}N = NPC{classes.Colors.ENDC}")
-		print("[w, a, s, d] + [RETURN] to move")
-		print("")
-		print(f"HP: {getHealth(room.player)} ({room.player.currentHp})")
-		print(f"ATK: {room.player.attackPower}")
-		print("")
-	else:
-		raise TypeError("ERROR: argument \'room\' must be of type Room!")
+    if type(room) is classes.Room:		
+        print(f"{classes.Colors.WHITE}---{classes.Colors.ENDC}[{classes.Colors.WARNING}{room.name}{classes.Colors.ENDC}]{classes.Colors.WHITE}---{classes.Colors.WHITE}")
+        print("")
+        print(f"{classes.Colors.OKGREEN}P = Player{classes.Colors.ENDC}, {classes.Colors.OKBLUE}N = NPC{classes.Colors.ENDC}")
+        print(f"{classes.Colors.WHITE}[w, a, s, d] + [RETURN] to move{classes.Colors.ENDC}")
+        print("")
+        print(f"{classes.Colors.WHITE}HP:{classes.Colors.ENDC} {getHealth(room.player)} ({room.player.currentHp})")
+        print(f"ATK: {room.player.attackPower}")
+        print("")
+    else:
+	    raise TypeError("ERROR: argument \'room\' must be of type Room!")
 
 #Checks if the values in a tuple are integers
 def IsValidPos(pos):

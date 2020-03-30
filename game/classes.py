@@ -3,8 +3,9 @@ from helpers import *
 import os, sys
 
 class Colors:
+	WHITE = '\033[37m'
 	HEADER = '\033[95m'
-	OKBLUE = '\033[94m'
+	OKBLUE = '\033[96m'
 	OKGREEN = '\033[92m'
 	WARNING = '\033[93m'
 	RED = '\033[31m'
@@ -81,7 +82,7 @@ class Room():
 
 	def SetSustainMessage(self, msg):
 		if type(msg) is str:
-			self.sustainMessage = msg
+			self.sustainMessage = f"{Colors.OKGREEN}{msg}{Colors.ENDC}"
 		else:
 			raise ValueError("ERROR: Argument \'msg\' has to be of type \'str\'!")
 
@@ -102,23 +103,23 @@ class Room():
 
 			for temp in range(2):
 				for cell_x in range(self.negativeBounds[0], self.positiveBounds[0] + 1, 1):
-					print(f"     | ", end="")
+					print(f"{Colors.WHITE}     | {Colors.ENDC}", end="")				
 				print("")
 
-			print(" -- ", end="")
+			print(f"{Colors.WHITE} -- {Colors.ENDC}", end="")
 			for cell_x in range(self.negativeBounds[0], self.positiveBounds[0] + 1, 1):
-				char_to_print = " *  -- "
+				char_to_print = f"{Colors.WHITE} *  -- {Colors.ENDC}"
 				#"[ ] -- "
 				for obj in self.objects:
 					if obj.position[0] == cell_x and obj.position[1] == cell_y:
 						if type(obj) is NPC:
-							char_to_print = Colors.OKBLUE +  " N " + Colors.ENDC + " -- "
+							char_to_print = Colors.OKBLUE +  " N " + Colors.ENDC + f"{Colors.WHITE} -- {Colors.ENDC}"
 						elif type(obj) is Player:
-							char_to_print = Colors.OKGREEN + " P " + Colors.ENDC + " -- "
+							char_to_print = Colors.OKGREEN + " P " + Colors.ENDC + f"{Colors.WHITE} -- {Colors.ENDC}"
 						elif type(obj) is Wall:
-							char_to_print = Colors.RED + "[ ]" + Colors.ENDC + " -- "
+							char_to_print = Colors.RED + "[ ]" + Colors.ENDC + f"{Colors.WHITE} -- {Colors.ENDC}"
 						else:
-							char_to_print = " *  -- "
+							char_to_print = f"{Colors.WHITE} *  -- {Colors.ENDC}"
 
 				print(char_to_print, end="")
 			print("")
@@ -127,7 +128,7 @@ class Room():
 			if cell_y == self.negativeBounds[1]:
 				for temp in range(2):
 					for cell_x in range(self.negativeBounds[0], self.positiveBounds[0] + 1, 1):
-						print(f"     | ", end="")
+						print(f"{Colors.WHITE}     | {Colors.ENDC}", end="")
 					print("")
 
 class EntityType(Enum):
