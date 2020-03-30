@@ -25,7 +25,7 @@ class Room():
 					if type(obj) is Player:
 						obj.SetRoom(self)
 			else:
-				raise ValueError("ERROR: List Objects cannot be empty!")				
+				raise ValueError("ERROR: List Objects cannot be empty!")
 		else:
 			raise TypeError("ERROR: Objects must be a list!")
 
@@ -65,9 +65,9 @@ class Room():
 
 	def IsOccupied(self, pos):
 		if type(pos) is tuple:
-			if IsValidPos(pos):				
-				for obj in self.objects:					
-					if obj.position[0] == pos[0] and obj.position[1] == pos[1] and type(obj) is Wall:						
+			if IsValidPos(pos):
+				for obj in self.objects:
+					if obj.position[0] == pos[0] and obj.position[1] == pos[1] and type(obj) is Wall:
 						return True
 					else:
 						pass
@@ -78,7 +78,7 @@ class Room():
 
 		else:
 			raise TypeError("ERROR: Pos must be a tuple with a length of 2!")
-		
+
 	def SetSustainMessage(self, msg):
 		if type(msg) is str:
 			self.sustainMessage = msg
@@ -92,17 +92,17 @@ class Room():
 			raise TypeError("ERROR: Argument \'player\' has to be of type \'Player\'!")
 
 	def Render(self, displayLegendBool):
-		clear()				
+		clear()
 		if displayLegendBool == True:
 			displayLegend(self)
-		
+
 		print(self.sustainMessage)
 
 		for cell_y in range(self.positiveBounds[1], self.negativeBounds[1] - 1, -1):
 
 			for temp in range(2):
 				for cell_x in range(self.negativeBounds[0], self.positiveBounds[0] + 1, 1):
-					print(f"     | ", end="")				
+					print(f"     | ", end="")
 				print("")
 
 			print(" -- ", end="")
@@ -110,7 +110,7 @@ class Room():
 				char_to_print = " *  -- "
 				#"[ ] -- "
 				for obj in self.objects:
-					if obj.position[0] == cell_x and obj.position[1] == cell_y:												
+					if obj.position[0] == cell_x and obj.position[1] == cell_y:
 						if type(obj) is NPC:
 							char_to_print = Colors.OKBLUE +  " N " + Colors.ENDC + " -- "
 						elif type(obj) is Player:
@@ -136,13 +136,34 @@ class EntityType(Enum):
 	Enemy = 3
 
 class Player():
-	def __init__(self, entityType, name, position, maxHp, level):
-		self.entityType = entityType
-		self.name = name
-		self.position = position
-		self.maxHp = maxHp
-		self.currentHp = self.maxHp		
-		self.level = level
+	def __init__(self, name, position, maxHp, level, attackPower):
+		self.entityType = EntityType.Player
+
+		if type(name) is str and len(name) > 0:
+			self.name = name
+		else:
+			raise ValueError("ERROR: Argument in constructor, \'name\' must be of type \'str\' and have a length greater than zero characters")
+
+		if type(position) is tuple and IsValidPos(position):
+			self.position = position
+		else:
+			raise ValueError("ERROR: Argument in constructor, \'position\' must be of type \'tuple\'!")
+
+		if type(maxHp) is int and maxHp > 0:
+			self.maxHp = maxHp
+			self.currentHp = self.maxHp
+		else:
+			raise ValueError("ERROR: Argument in constructor, \'maxHp\' must be of type \'integer\'!")
+
+		if type(level) is int and level > 0:
+			self.level = level
+		else:
+			raise ValueError("ERROR: Argument in constructor, \'level\' must be of type \'integer\' and greater than zero!")
+
+		if type(attackPower) is int and attackPower > 0:
+			self.attackPower = attackPower + (self.level * 2)
+		else:
+			raise ValueError("ERROR: Argument in constructor, \'attackPower\' must be of type \'integer\' and be greater than zero!")
 
 	def Hurt(self, dmg):
 		if type(dmg) is int:
@@ -155,13 +176,13 @@ class Player():
 		if type(room) is Room:
 			self.myRoom = room
 			self.myRoom.SetPlayer(self)
-	
+
 	def Move(self, pos):
 		if self.myRoom:
 			if IsValidPos(pos):
 				moveLength = 0
 				for coordinate in pos:
-					moveLength += coordinate			
+					moveLength += coordinate
 				if moveLength >= 2:
 					raise ValueError("ERROR: Cannot move more than 1 unit per turn!")
 				elif moveLength == 0:
@@ -170,7 +191,7 @@ class Player():
 				elif moveLength == 1 or moveLength == (-1):
 					if type(self.myRoom) is Room and IsInBounds(self.myRoom.negativeBounds, self.myRoom.positiveBounds, (self.position[0] + pos[0], self.position[1] + pos[1])) and self.myRoom.IsOccupied((self.position[0] + pos[0], self.position[1] + pos[1])) == False:
 						self.position = (self.position[0] + pos[0], self.position[1] + pos[1])
-						
+
 						if self.myRoom.CanInteract(self):
 							self.myRoom.SetSustainMessage("Possible actions: talk")
 						else:
@@ -182,7 +203,7 @@ class Player():
 					raise ValueError("ERROR: Cannot move that many units")
 
 			else:
-				raise ValueError("ERROR: Position is valid!")
+				raise ValueError("ERROR: Position is invalid!")
 		else:
 			raise ValueError("ERROR: myRoom is not defined on this instance of Player")
 
@@ -192,26 +213,25 @@ class NPC():
 		self.name = name
 		self.position = position
 		self.maxHp = maxHp
-		self.currentHp = self.maxHp		
+		self.currentHp = self.maxHp
 		self.level = level
 
 	def SetRoom(self, room):
 		self.myRoom = room
-		print("Room set")
-	
+
 	def Move(self, pos):
 		if self.myRoom:
 			if IsValidPos(pos):
 				moveLength = 0
 				for coordinate in pos:
-					moveLength += coordinate			
+					moveLength += coordinate
 				if moveLength >= 2:
 					raise ValueError("ERROR: Cannot move more than 1 unit per turn!")
 				elif moveLength == 0:
 					raise ValueError("ERROR: Cannot move a distance of 0 units!")
 				elif moveLength == 1 or moveLength == (-1):
 					if type(self.myRoom) is Room and IsInBounds(self.myRoom.negativeBounds, self.myRoom.positiveBounds, (self.position[0] + pos[0], self.position[1] + pos[1])) and self.myRoom.IsOccupied((self.position[0] + pos[0], self.position[1] + pos[1])) == False:
-						self.position = (self.position[0] + pos[0], self.position[1] + pos[1])				
+						self.position = (self.position[0] + pos[0], self.position[1] + pos[1])
 					else:
 						pass
 				else:
@@ -225,7 +245,7 @@ class NPC():
 class Wall():
 	def __init__(self, position):
 		if type(position) is tuple:
-			if IsValidPos(position):			
+			if IsValidPos(position):
 				self.position = position
 			else:
 				raise ValueError("ERROR: Position is not valid!")

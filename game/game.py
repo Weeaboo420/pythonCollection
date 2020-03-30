@@ -28,7 +28,7 @@ objects.append(Wall((7, 2)))
 objects.append(Wall((7, -1)))
 objects.append(Wall((7, -2)))
 
-objects.append(Player(EntityType.Player, playerName, (0, 0), 100, 1))
+objects.append(Player(playerName, (0, 0), 100, 1, 2))
 #Add the player last so that it will be drawn on top of any npc or other entity it shares a cell with
 
 #global player

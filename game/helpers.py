@@ -6,12 +6,12 @@ def clear():
 
 def getHealth(player):
     if type(player) is classes.Player:
-        
+
         hitPoints = 0
 
         for ticks in range(0, player.currentHp, 10):
             if ticks % 10 == 0:
-                hitPoints += 1        
+                hitPoints += 1
 
         healthString = ""
         suffix = ""
@@ -20,7 +20,7 @@ def getHealth(player):
             healthString = "["
             for hp in range(0, hitPoints, 1):
                 healthString += "="
-            
+
             if hitPoints < 10:
                 for missingHp in range(0, 10 - hitPoints, 1):
                     healthString += " "
@@ -35,16 +35,17 @@ def getHealth(player):
         raise TypeError("ERROR: Argument \'player\' has to be of type \'Player\'!")
 
 def displayLegend(room):
-    if type(room) is classes.Room:		
-        print(f"---[{classes.Colors.WARNING}{room.name}{classes.Colors.ENDC}]---")
-        print("")
-        print(f"{classes.Colors.OKGREEN}P = Player{classes.Colors.ENDC}, {classes.Colors.OKBLUE}N = NPC{classes.Colors.ENDC}")
-        print("[w, a, s, d] + [RETURN] to move")
-        print("")
-        print(f"HP: {getHealth(room.player)} ({room.player.currentHp})")
-        print("")
-    else:
-	    raise TypeError("ERROR: argument \'room\' must be of type Room!")
+	if type(room) is classes.Room:
+		print(f"---[{classes.Colors.WARNING}{room.name}{classes.Colors.ENDC}]---")
+		print("")
+		print(f"{classes.Colors.OKGREEN}P = Player{classes.Colors.ENDC}, {classes.Colors.OKBLUE}N = NPC{classes.Colors.ENDC}")
+		print("[w, a, s, d] + [RETURN] to move")
+		print("")
+		print(f"HP: {getHealth(room.player)} ({room.player.currentHp})")
+		print(f"ATK: {room.player.attackPower}")
+		print("")
+	else:
+		raise TypeError("ERROR: argument \'room\' must be of type Room!")
 
 #Checks if the values in a tuple are integers
 def IsValidPos(pos):
