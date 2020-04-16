@@ -1,40 +1,33 @@
 ## pythonCollection
 A selection of scripts I am working on in my spare time
 
+# Login/
+A fully working login system, complete with session handling and some basic encryption.
 
-# Game
+# cat-fact.py
+A program that sends a request to the cat-facts API and returns a random cat fact.
+
+# Game/
 A basic rpg-like grid based game I am working on. I might dedicate a separate repo for it in the future.
 
-# BlackJack
+# BlackJack/
 A simple game where you play blackjack, pretty self-explanatory.
 
-# Imaging
+# Imaging/
 Some experimental imaging programs
 
-# MazeSolve
+# MazeSolve/
 A program that is supposed to be able to solve basic mazes using images, inspired by computerphile's video. Currently not in development.
 
-# Outliner
+# Outliner/
 A program that lets you calculate the sum, average and median of datasets
 
 
 # alphagen.py
 Generates a random string with the given length provided by the user
 
-# cif.py
-A basic dos-like program that can move around inside directories. It's kinda boring if you ask me. I don't plan on further developing it.
-
 # Cipher.py
 A basic Caesar-cipher.
-
-# Dashboard
-A text-based log in system, it's not secure at all as all the passwords are stored in plaintext.
-
-# Database
-It is what it sounds like, a database. You can set new data using "learn" and retrive data by using "get".
-
-# Scrito.py
-A simple text editor. Basic but still superior to Vim.
 
 # SlidePuzzle.py
 A simple sliding puzzle.
