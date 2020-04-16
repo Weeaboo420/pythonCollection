@@ -11,6 +11,9 @@ __pycache__/
 #custom .data files that contain sensitive information
 *.data
 
+maze_enlarged.png
+maze_solved.png
+
 # C extensions
 *.so
 
