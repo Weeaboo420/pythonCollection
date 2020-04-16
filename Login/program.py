@@ -154,57 +154,61 @@ def auto():
         helpers.clear()
 
 def login():
-    loginLoop = True
-    username, password = None, None
+    if session.user == "NONE":
+        loginLoop = True
+        username, password = None, None
 
-    step = 1
-    msg = ""
-    while loginLoop:
-        helpers.clear()
-        if step != 3:
-            print("[Login] Type \'-c to cancel\'")
-            print(f"{msg}")
-            print("")
-            msg = ""
+        step = 1
+        msg = ""
+        while loginLoop:
+            helpers.clear()
+            if step != 3:
+                print("[Login] Type \'-c to cancel\'")
+                print(f"{msg}")
+                print("")
+                msg = ""
 
-            if step == 2:
-                print(f"Username? {username}")
-                password = getpass("Password? ")
+                if step == 2:
+                    print(f"Username? {username}")
+                    password = getpass("Password? ")
 
-                if len(password) > 0:
-                    if password != "-c":
-                        if GetPassword(username) == password and IsValidInput(password):
-                            step += 1                        
-                        elif GetPassword(username) == StatusCode.UNKNOWN_ERROR:
-                            msg = "Something went wrong, make sure you put in the correct password"
-                        else:
-                            msg = "The passwords do not match"
-                    elif password == "-c":
-                        helpers.clear()
-                        print("[Login cancelled]")
-                        loginLoop = False 
-
-            if step == 1:
-                username = input("Username? ")
-                if len(username) > 0:
-                    if username != "-c":
-                        if IsValidInput(username):
-                            if IsValidUser(username) == StatusCode.USER_ALREADY_EXISTS:
-                                step += 1
+                    if len(password) > 0:
+                        if password != "-c":
+                            if GetPassword(username) == password and IsValidInput(password):
+                                step += 1                        
+                            elif GetPassword(username) == StatusCode.UNKNOWN_ERROR:
+                                msg = "Something went wrong, make sure you put in the correct password"
                             else:
-                                msg = f"\'{username}\' is not a user"
-                        else:
-                            msg = f"Invalid input, it may not contain {GetValidChars()}"
-                        
-                    elif username == "-c":
-                        helpers.clear()
-                        print("[Login cancelled]")                        
-                        loginLoop = False                        
-        else:
-            print("[Login complete]")
-            session.user = username
-            CreateSession(username)
-            loginLoop = False
+                                msg = "The passwords do not match"
+                        elif password == "-c":
+                            helpers.clear()
+                            print("[Login cancelled]")
+                            loginLoop = False 
+
+                if step == 1:
+                    username = input("Username? ")
+                    if len(username) > 0:
+                        if username != "-c":
+                            if IsValidInput(username):
+                                if IsValidUser(username) == StatusCode.USER_ALREADY_EXISTS:
+                                    step += 1
+                                else:
+                                    msg = f"\'{username}\' is not a user"
+                            else:
+                                msg = f"Invalid input, it may not contain {GetValidChars()}"
+                            
+                        elif username == "-c":
+                            helpers.clear()
+                            print("[Login cancelled]")                        
+                            loginLoop = False                        
+            else:
+                print("[Login complete]")
+                session.user = username
+                CreateSession(username)
+                loginLoop = False
+    else:
+        helpers.clear()
+        print("You have to log out first.")
 
 def register():    
     registrationLoop = True
