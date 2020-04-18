@@ -144,9 +144,11 @@ def CreateSession(username):
 def logout():
     if session.user != "NONE":
         session.user = "NONE"
+    if os.path.isfile("db/session.data"):
+        os.remove("db/session.data")
     helpers.clear()
 
-def auto():
+def autologin():
     if SessionIsStillValid():
         data = GetSession()        
         session.user = data[0]
@@ -302,12 +304,13 @@ functions.append(function(register, ["reg"]))
 functions.append(function(login, ["lg", "start"]))
 functions.append(function(quit, ["exit"]))
 functions.append(function(logout, ["out"]))
-functions.append(function(auto, ["au", "a"]))
 functions.append(function(aliases, ["al"]))
 
 if not SessionIsStillValid():
     if os.path.isfile("db/session.data"):
         os.remove("db/session.data")
+else:
+    autologin()
 
 def tryAction(commandName):
     actionExists = False
@@ -323,10 +326,7 @@ def main():
     if session.user != "NONE":
         print(f"Logged in as: {session.user}")
     else:
-        if SessionIsStillValid():
-            print("Not currently logged in. A session is available, type \'auto\' to log in without a password")
-        else:
-            print("Not currently logged in")
+        print("Not currently logged in")
 
     helpers.showCommands()
     com = input("> ")

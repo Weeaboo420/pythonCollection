@@ -7,5 +7,5 @@ def showCommands():
 commands:
 login    register
 logout   exit
-auto     aliases
+aliases
 """)
