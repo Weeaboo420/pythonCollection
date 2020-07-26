@@ -74,6 +74,7 @@ while True:
 					input("Press RETURN to continue...")
 					inDialog = False
 					player.myRoom.SetSustainMessage("")
+					player.Move((0, 0))
 					clear()
 
 	if c.lower() == "exit" or c.lower() == "quit" or c.lower() == "stop":

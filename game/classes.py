@@ -186,10 +186,10 @@ class Player():
 					moveLength += coordinate
 				if moveLength >= 2:
 					raise ValueError("ERROR: Cannot move more than 1 unit per turn!")
-				elif moveLength == 0:
-					raise ValueError("ERROR: Cannot move a distance of 0 units!")
+				#elif moveLength == 0:
+				#	raise ValueError("ERROR: Cannot move a distance of 0 units!")
 
-				elif moveLength == 1 or moveLength == (-1):
+				elif moveLength == 1 or moveLength == (-1) or moveLength == 0:
 					if type(self.myRoom) is Room and IsInBounds(self.myRoom.negativeBounds, self.myRoom.positiveBounds, (self.position[0] + pos[0], self.position[1] + pos[1])) and self.myRoom.IsOccupied((self.position[0] + pos[0], self.position[1] + pos[1])) == False:
 						self.position = (self.position[0] + pos[0], self.position[1] + pos[1])
 
