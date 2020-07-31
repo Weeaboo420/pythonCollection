@@ -6,7 +6,8 @@ objects = []
 playerName = "Player"
 
 #entities
-objects.append(NPC(EntityType.NPC, "Dummy NPC", (1, 1), 50, 4))
+objects.append(NPC(EntityType.NPC, "Dummy NPC", (1, 1), 50, 1))
+objects.append(NPC(EntityType.NPC, "Cool NPC", (10, 0), 50, 420))
 
 #walls
 objects.append(Wall((-1, -1)))
