@@ -32,6 +32,14 @@ def HexToDecimal(hexcode): #Convert from hex to decimal
 def DecimalToHex(decimal): #Convert from decimal to hex
     hex = []
     decimal = str(decimal)
+    
+    try:
+        int(decimal)
+        if int(decimal) < 0:
+            return "Can\'t convert negative numbers to hex"
+
+    except:
+        return f"Can\'t convert {decimal} to hex"
 
     nextNum = int(decimal)
 
@@ -58,7 +66,7 @@ def DecimalToHex(decimal): #Convert from decimal to hex
     return "".join(hex)
     
 
-print("\nWeeaboo\'s HexConverter v1.0")
+print("\nWeeaboo\'s HexConverter v1.1")
 print("Type \'switch\' to change mode. Type \'exit\' to exit")
 print("Type \'toggle-hex\' to toggle hex code display\n")
 mode = 0 #0 = to decimal, 1 = to hex
