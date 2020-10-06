@@ -16,7 +16,7 @@ decimalDict = {
     "15": "F"
 }
 
-def Convert(hexcode): #Convert from hex to decimal
+def HexToDecimal(hexcode): #Convert from hex to decimal
     decimal = 0    
     currentPower = len(hexcode) - 1   
     
@@ -29,7 +29,7 @@ def Convert(hexcode): #Convert from hex to decimal
     
     return decimal
 
-def UnConvert(decimal): #Convert from decimal to hex
+def DecimalToHex(decimal): #Convert from decimal to hex
     hex = []
     decimal = str(decimal)
 
@@ -116,12 +116,12 @@ while True:
 
             if mode == 0: #Hex to decimal mode
                 if canConvert:
-                    print(f"Decimal >> {Convert(userInput)}\n")
+                    print(f"Decimal >> {HexToDecimal(userInput)}\n")
                 else:
                     print(f"{errorMessage}\n")
 
             else: #Decimal to hex mode
                 if canConvert:
-                    print(f"Hex >> {UnConvert(userInput)}\n")
+                    print(f"Hex >> {DecimalToHex(userInput)}\n")
                 else:
                     print("NaN (Not a number)\n")
