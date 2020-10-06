@@ -1,14 +1,4 @@
 hexDict = {
-    "0": 0,
-    "1": 1,
-    "2": 2,
-    "3": 3,
-    "4": 4,
-    "5": 5,
-    "6": 6,
-    "7": 7,
-    "8": 8,
-    "9": 9,
     "A": 10,
     "B": 11,
     "C": 12,
@@ -31,7 +21,10 @@ def Convert(hexcode): #Convert from hex to decimal
     currentPower = len(hexcode) - 1   
     
     for char in hexcode:
-        decimal += hexDict[str(char)] * (16 ** currentPower)
+        if str(char) not in hexDict.keys() and int(char) <= 9:
+            decimal += int(char) * (16 ** currentPower)
+        else:
+            decimal += hexDict[str(char)] * (16 ** currentPower)
         currentPower -= 1
     
     return decimal
@@ -69,7 +62,7 @@ print("\nWeeaboo\'s HexConverter v1.0")
 print("Type \'switch\' to change mode. Type \'exit\' to exit")
 print("Type \'toggle-hex\' to toggle hex code display\n")
 mode = 0 #0 = to decimal, 1 = to hex
-fullHexMode = False #Should hex codes have a "0x" before them or not?
+fullHexMode = False #Should hex codes have a "0x" before them or not when converting from decimal to hex?
 
 while True:
     if mode == 0:
@@ -103,20 +96,32 @@ while True:
                 userInput = newUserInput
 
             canConvert = True
+            errorMessage = ""
+
             for char in userInput:
-                if char not in hexDict.keys():
-                    canConvert = False
-                    break
+
+                if mode == 0 and canConvert:
+                    if char not in hexDict.keys():
+                        try:
+                            int(char)
+                            if int(char) < 0:
+                                canConvert = False
+                                errorMessage = "Negative numbers not allowed"
+                                break
+                        except:                                              
+                            canConvert = False
+                            errorMessage = f"Can\'t convert hex \'{userInput}\' to decimal"
+                            break
+                                        
 
             if mode == 0: #Hex to decimal mode
                 if canConvert:
                     print(f"Decimal >> {Convert(userInput)}\n")
                 else:
-                    print("NaN (Not a number)\n")
+                    print(f"{errorMessage}\n")
 
             else: #Decimal to hex mode
                 if canConvert:
                     print(f"Hex >> {UnConvert(userInput)}\n")
                 else:
                     print("NaN (Not a number)\n")
-            
