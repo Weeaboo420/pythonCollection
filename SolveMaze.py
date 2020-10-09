@@ -45,6 +45,7 @@ class Node:
         self.distance = float("inf") #Set the node's distance to infinity
         self.parent = None
         self.adjacentNodes = None
+        self.pathPercent = 0
 
 
 def main(imagePath):
@@ -81,8 +82,11 @@ def main(imagePath):
         if node.walkable and node.position[1] == 0:
             startNode = node            
             startNode.distance = 0
+            startNode.pathPercent = 0
+
         elif node.walkable and node.position[1] == imageSize[1]-1:
             goalNode = node
+            goalNode.pathPercent = 1
 
     finished = False
     foundPath = False
@@ -132,17 +136,24 @@ def main(imagePath):
     closestDistance = float("inf")
 
     currentNode = None
+    
+
     while startNode not in path:
         if len(path) == 0:
             path.append(goalNode)
-        else:
+        else:                        
             path.append(currentNode.parent)
-
+        
         currentNode = path[len(path)-1]
     
+    pathPercent = 1
+    for node in path:
+        node.pathPercent = pathPercent
+        pathPercent -= (1 / len(path))
 
-    path.reverse()
+    path.reverse() #Reverse the path since it's been loaded in backwards.
     
+    #Get a new, unmodified copy of the nodes
     index = 0
     nodes.clear()
     for y in range(imageSize[1]):
@@ -157,7 +168,7 @@ def main(imagePath):
 
     index = 0
     newImageData = []
-    pathPercent = 0
+    #pathPercent = 0
 
     for y in range(imageSize[1]):
         for x in range(imageSize[0]):
@@ -168,9 +179,8 @@ def main(imagePath):
 
                 for pathNode in path:
                     if nodes[index].position == pathNode.position:                        
-                        #newImageData.append((66, 75, 245)) #Node that is part of the path. Has a blue color.
-                        newImageData.append(FadeColor((66, 75, 245), (245, 66, 87), pathPercent))
-                        pathPercent += (1 / len(path))
+                        newImageData.append(FadeColor((66, 75, 245), (245, 66, 87), pathNode.pathPercent))
+                        #pathPercent += (1 / len(path))
                         empty = False
                         break
 
