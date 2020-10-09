@@ -7,11 +7,6 @@ def clear():
         os.system("clear")
 
 class person():
-        
-        myName = ""
-        myAge = 0
-        myGender = ""
-
         def __init__(self, age, gender, minAge, maxAge):
                 self.myGender = gender
 

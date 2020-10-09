@@ -87,7 +87,7 @@ while True:
         
         elif userInput.lower() == "switch": #Switch conversion mode
             if mode == 0:
-                mode = 1                
+                mode = 1
             else:
                 mode = 0
         
