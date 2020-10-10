@@ -76,6 +76,7 @@ def main(imagePath):
     #Dijkstra's Algorithm stuff
     t1 = time()
     unexplored = nodes.copy()
+    print("Calculating...")
 
     startNode, goalNode = None, None
     for node in nodes:
@@ -121,99 +122,101 @@ def main(imagePath):
                 nodes[i] = adjacent
         
         if len(unexplored) == 0 or goalNode not in unexplored:
-            finished = True
-            if goalNode not in unexplored:
-                foundPath = True
-        
-    if foundPath:
-        print("Path found")
-    else:
-        print("Could not calculate a suitable path")
-        
-    print(f"Calculation took {round(time() - t1, 4)}s")
-
-    path = []
-    closestDistance = float("inf")
-
-    currentNode = None
+            finished = True            
     
-
-    while startNode not in path:
-        if len(path) == 0:
-            path.append(goalNode)
-        else:                        
-            path.append(currentNode.parent)
-        
-        currentNode = path[len(path)-1]
-    
-    pathPercent = 1
-    for node in path:
-        node.pathPercent = pathPercent
-        pathPercent -= (1 / len(path))
-
-    path.reverse() #Reverse the path since it's been loaded in backwards.
-    
-    #Get a new, unmodified copy of the nodes
-    index = 0
+    unexplored.clear()
     nodes.clear()
-    for y in range(imageSize[1]):
-        for x in range(imageSize[0]):
 
-            if rawImageData[index] == (255, 255, 255) or rawImageData[index] == (255, 255, 255, 255):
-                nodes.append(Node((x, y), True))
-            else:
-                nodes.append(Node((x, y), False))
+    if goalNode not in unexplored:
+        foundPath = True
+    
+    if foundPath:
+        print("\nPath found")
+        print(f"Calculation took {round(time() - t1, 4)}s")
+        print("Saving output... ", end="", flush=True)
 
-            index += 1
+        path = []
+        currentNode = None    
 
-    index = 0
-    newImageData = []
-    #pathPercent = 0
-
-    for y in range(imageSize[1]):
-        for x in range(imageSize[0]):
+        while startNode not in path:
+            if len(path) == 0:
+                path.append(goalNode)
+            else:                        
+                path.append(currentNode.parent)
             
-            if nodes[index].walkable:
+            currentNode = path[len(path)-1]
+        
+        pathPercent = 1
+        for node in path:
+            if type(node) is Node:
+                node.pathPercent = pathPercent
+                pathPercent -= (1 / len(path))
+
+        path.reverse() #Reverse the path since it's been loaded in backwards.
+        
+        #Get a new, unmodified copy of the nodes
+        index = 0        
+        for y in range(imageSize[1]):
+            for x in range(imageSize[0]):
+
+                if rawImageData[index] == (255, 255, 255) or rawImageData[index] == (255, 255, 255, 255):
+                    nodes.append(Node((x, y), True))
+                else:
+                    nodes.append(Node((x, y), False))
+
+                index += 1
+
+        index = 0
+        newImageData = []
+        for y in range(imageSize[1]):
+            for x in range(imageSize[0]):
                 
-                empty = True
+                if nodes[index].walkable:
+                    
+                    empty = True
 
-                for pathNode in path:
-                    if nodes[index].position == pathNode.position:                        
-                        newImageData.append(FadeColor((66, 75, 245), (245, 66, 87), pathNode.pathPercent))
-                        #pathPercent += (1 / len(path))
-                        empty = False
-                        break
+                    for pathNode in path:
+                        if nodes[index].position == pathNode.position:                        
+                            newImageData.append(FadeColor((66, 75, 245), (245, 66, 87), pathNode.pathPercent))
+                            empty = False
+                            break
 
-                if empty:                    
-                    newImageData.append((255, 255, 255)) #Node that is not part of the path. Has a white color.
+                    if empty:                    
+                        newImageData.append((255, 255, 255)) #Node that is not part of the path. Has a white color.
 
-            else:                
-                newImageData.append((0, 0, 0)) #Node that is a wall. Has a black color.
+                else:                
+                    newImageData.append((0, 0, 0)) #Node that is a wall. Has a black color.
 
-            index += 1
+                index += 1
 
-    newImage = Image.new("RGB", imageSize)
-    newImage.putdata(newImageData)
-    newImage = newImage.resize((imageSize[0]*30, imageSize[1]*30), Image.NEAREST)
+        newImage = Image.new("RGB", imageSize)
+        newImage.putdata(newImageData)
+        newImage = newImage.resize((imageSize[0]*30, imageSize[1]*30), Image.NEAREST)
 
-    newName = "output_" + image.filename
+        newName = "output_" + image.filename
 
-    if isfile(newName):
-        print(f"\'{newName}\' already exists. Please choose a new name.")
+        if isfile(newName):
+            print(f"\'{newName}\' already exists. Please choose a new name.")
 
-        dilemma = True
-        while dilemma:
-            inpt = input("> ")
-            if len(inpt) > 0 and not isfile(inpt):
-                newImage.save(inpt)
-                dilemma = False
+            dilemma = True
+            while dilemma:
+                inpt = input("> ")
+                if len(inpt) > 0 and not isfile(inpt):                    
+                    newImage.save(inpt)
+                    print("Done")
+                    dilemma = False
+
+        else:            
+            newImage.save(newName)
+            print("Done")
+
+        print("File saved\n")
 
     else:
-        newImage.save(newName)
+        print("\nCould not calculate a suitable path\n\n")
 
-    print("File saved\n")
 
-print("Weeaboo\'s Maze solver v1.0 | Type \'exit\' to cancel\n\n")
+print("Weeaboo\'s Maze solver v1.1 | Type \'exit\' to cancel\n\n")
 while True:
     inputBuffer = input("Enter image path: ")
 
@@ -221,4 +224,8 @@ while True:
         if inputBuffer.lower() == "exit":
             exit()
         else:
-            main(inputBuffer)
+            try:
+                main(inputBuffer)
+            except:
+                print("Something went wrong when calculating the path. Make sure the entrances to the maze are at the top and bottom.")
+                print("Very large mazes may consume too much memory and then break the program.")
