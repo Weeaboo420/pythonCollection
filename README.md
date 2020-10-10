@@ -1,5 +1,5 @@
 # Python Collection
-A selection of scripts I am working on in my spare time
+A selection of scripts I am work on in my spare time.
 
 ## SolveMaze.py
 A small program that reads a png of a maze and tries to find a solution to it. Uses Dijkstra's Algorithm. Here's a real solved maze which took about 200 seconds to compute:
@@ -18,13 +18,13 @@ A basic rpg-like grid based game I am working on. I might dedicate a separate re
 A simple game where you play blackjack, pretty self-explanatory.
 
 ## Imaging/
-Some experimental imaging programs
+Some experimental imaging programs.
 
 ## Outliner/
-A program that lets you calculate the sum, average and median of datasets
+A program that lets you calculate the sum, average and median of datasets.
 
 ## alphagen.py
-Generates a random string with the given length provided by the user
+Generates a random string with the given length provided by the user.
 
 ## Cipher.py
 A basic Caesar-cipher.
