@@ -4,7 +4,7 @@ endColor = (245, 66, 87)
 
 ### INTERNAL SETTINGS - DO NOT MODIFY ###
 defaultColors = [(66, 75, 245), (245, 66, 87)]
-version = 1.2
+version = 1.3
 
 try:
     from PIL import Image    
@@ -19,6 +19,7 @@ except:
     exit()
 
 from os.path import isfile
+from pathlib import Path
 from time import time
 
 def TupleContainsType(data, expectedType):
@@ -165,7 +166,7 @@ def Main(imagePath):
     if foundPath:
         print("\nPath found")
         print(f"Calculation took {round(time() - t1, 4)}s")
-        print("Saving output... ", end="", flush=True)
+        print("Saving output... ", flush=True)
 
         path = []
         currentNode = None    
@@ -221,11 +222,28 @@ def Main(imagePath):
 
                 index += 1
 
+
+
         newImage = Image.new("RGB", imageSize)
         newImage.putdata(newImageData)
         newImage = newImage.resize((imageSize[0]*30, imageSize[1]*30), Image.NEAREST)
 
-        newName = "output_" + image.filename
+                
+        pathWithoutFilename = list(Path(imagePath).parts) #Get the full path to the file        
+        newName = pathWithoutFilename.pop() #Remove the filename from the path
+
+        #Remove slashes on drive letters
+        if "\\" in pathWithoutFilename[0]: 
+            pathWithoutFilename[0] = pathWithoutFilename[0].replace("\\", "")
+            pathWithoutFilename = "\\".join(pathWithoutFilename) #Convert to string
+            pathWithoutFilename += "\\"
+
+        elif "/" in pathWithoutFilename[0]: 
+            pathWithoutFilename[0] = pathWithoutFilename[0].replace("/", "")
+            pathWithoutFilename = "/".join(pathWithoutFilename) #Convert to string
+            pathWithoutFilename += "/"
+            
+        newName = f"{pathWithoutFilename}output_{newName}" #Finalize path        
 
         if isfile(newName):
             print(f"\'{newName}\' already exists. Please choose a new name.")
@@ -233,14 +251,17 @@ def Main(imagePath):
             dilemma = True
             while dilemma:
                 inpt = input("> ")
-                if len(inpt) > 0 and not isfile(inpt):                    
-                    newImage.save(inpt)
-                    print("Done")
-                    dilemma = False
+                if len(inpt) > 0:
+                    if not isfile(f"{pathWithoutFilename}{inpt}"):
+                        newImage.save(f"{pathWithoutFilename}{inpt}")
+                        print("...Done")
+                        dilemma = False
+                    else:
+                        print("That file also already exists.")
 
         else:            
             newImage.save(newName)
-            print("Done")
+            print("...Done")
 
         print("File saved\n")
 
@@ -263,6 +284,6 @@ while True:
         else:
             try:
                 Main(inputBuffer)
-            except:
-                print("Something went wrong when calculating the path. Make sure the entrances to the maze are at the top and bottom.")
-                print("Very large mazes may consume too much memory and then break the program.")
+            except Exception as e:
+                print("\n\nSomething went wrong when calculating the path. Make sure the entrances to the maze are at the top and bottom.")
+                print(f"Very large mazes may consume too much memory and then break the program.\n\nDetails: {e}")
