@@ -1,3 +1,11 @@
+### USER SETTINGS ###
+startColor = (66, 75, 245)
+endColor = (245, 66, 87)
+
+### INTERNAL SETTINGS - DO NOT MODIFY ###
+defaultColors = [(66, 75, 245), (245, 66, 87)]
+version = 1.2
+
 try:
     from PIL import Image    
 except:
@@ -12,6 +20,27 @@ except:
 
 from os.path import isfile
 from time import time
+
+def TupleContainsType(data, expectedType):
+    if type(data) is tuple:
+        for value in data:
+            if type(value) is not expectedType:
+                return False
+        return True
+
+    else:
+        return False
+
+def IsValidColor(color):
+    if TupleContainsType(color, int):
+        for component in color:
+            if component < 0 or component > 255:
+                return False
+
+        if len(color) == 3:
+            return True
+
+    return False
 
 def ToTuple(arr):
     return (int(arr[0]), int(arr[1]), int(arr[2]))
@@ -48,12 +77,15 @@ class Node:
         self.pathPercent = 0
 
 
-def main(imagePath):
+def Main(imagePath):
     if not isfile(imagePath):
         print(f"Cannot find file \'{imagePath}\'\n")
         return
 
-    rawImageData = [] #Each pixel is an rgb tuple, such as (255, 255, 255) for white and (0, 0, 0) for black and so on...
+    #Each pixel is an rgb tuple, such as (255, 255, 255) for white and (0, 0, 0) for black and so on...
+    #We have to consider the possibility of there being an alpha channel, in that case a pixel would be a tuple with four values,
+    #like (255, 255, 255, 255).
+    rawImageData = [] 
     imageSize = None
 
     nodes = []
@@ -177,7 +209,7 @@ def main(imagePath):
 
                     for pathNode in path:
                         if nodes[index].position == pathNode.position:                        
-                            newImageData.append(FadeColor((66, 75, 245), (245, 66, 87), pathNode.pathPercent))
+                            newImageData.append(FadeColor(startColor, endColor, pathNode.pathPercent))
                             empty = False
                             break
 
@@ -215,8 +247,13 @@ def main(imagePath):
     else:
         print("\nCould not calculate a suitable path\n\n")
 
+#Make sure the colors are correct
+if not IsValidColor(startColor):
+    startColor = defaultColors[0]
+if not IsValidColor(endColor):
+    endColor = defaultColors[1]
 
-print("Weeaboo\'s Maze solver v1.1 | Type \'exit\' to cancel\n\n")
+print(f"Weeaboo\'s Maze solver v{version} | Type \'exit\' to cancel\nYou can customize the path colors by editing this file\n")
 while True:
     inputBuffer = input("Enter image path: ")
 
@@ -225,7 +262,7 @@ while True:
             exit()
         else:
             try:
-                main(inputBuffer)
+                Main(inputBuffer)
             except:
                 print("Something went wrong when calculating the path. Make sure the entrances to the maze are at the top and bottom.")
                 print("Very large mazes may consume too much memory and then break the program.")
