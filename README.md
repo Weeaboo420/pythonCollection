@@ -1,7 +1,7 @@
 # Python Collection
 A selection of scripts I work on in my spare time.
 
-## SolveMaze.py
+## MazeSolver/SolveMaze.py
 A small program that reads a png of a maze and tries to find a solution to it. Uses Dijkstra's Algorithm. Here's a real solved maze which took about 200 seconds to compute:
 ![Solved maze](mdFiles/output_big.png)
 
