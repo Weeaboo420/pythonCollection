@@ -2,14 +2,14 @@
 import json
 from sys import argv as args
 from urllib.request import urlopen
-version = 1.3
-build_date = "Dec 07 2020"
+version = "1.3b"
+build_date = "Dec 08 2020"
 
 if len(args) >= 2:
 
     #Show patch notes
     if args[1].lower() == "--patch-notes":
-        patch_notes = ["+ Added \'help\' command", "+ Added option to display multiple definitions for a single query", "+ Added date display to patch notes"]
+        patch_notes = ["+ Added help message for when the word is empty but there is an option present"]
 
         print(f"\nNew in gd version {version} ({build_date}):")
         for note in patch_notes:
@@ -47,7 +47,7 @@ if len(args) >= 2:
         #in them so this feature might get removed in the future.
         word = ""
         for i in range(1, len(args)):
-            if (i+1) < len(args):
+            if (i+1) < len(args) and "--" not in args[i+1]:
                 word += f"{args[i]} "
             else:
                 if "--" not in args[i]: #Remove options from the query
@@ -60,47 +60,53 @@ if len(args) >= 2:
         if "--all" in args: #Enable the display of ALL definitions
             showAll = True
 
-        print(f"\nLooking up \'{word}\'...")
+        #Make sure that the word isn't empty
+        if len(word) > 0:
+            print(f"\nLooking up \'{word}\'...")
 
-        try:
-            #Get the raw JSON data from the API
-            data = json.loads(urlopen(f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}").read())
+            try:
+                #Get the raw JSON data from the API
+                data = json.loads(urlopen(f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}").read())
 
-            #Load single definition
-            if not showAll:
-                print("\nDefinition: ", end="")
-                print(data[0].get("meanings")[0].get("definitions")[0].get("definition"))
+                #Load single definition
+                if not showAll:
+                    print("\nDefinition: ", end="")
+                    print(data[0].get("meanings")[0].get("definitions")[0].get("definition"))
 
-                #Load example. Check if there is an example available or not and show a message accordingly...
-                example = data[0].get("meanings")[0].get("definitions")[0].get("example")
-                if example:
-                    print(f"Example: {example}\n")
-                else:
-                    print("No example found\n")
-
-            #Load ALL definitions
-            else:
-                print("\nDefinitions:\n")
-                definitions = data[0].get("meanings")
-                
-                for entry in definitions:
-                    #Load definitions and examples
-                    definition = entry.get("definitions")[0].get("definition")
-                    example = entry.get("definitions")[0].get("example")
-                    
-                    #If no example is present then we will simply say that there is no example available for that particular definition
-                    if not example:
-                        example = "No example found"
-                    
-                    #If there is an example then we insert the text "example" before it
+                    #Load example. Check if there is an example available or not and show a message accordingly...
+                    example = data[0].get("meanings")[0].get("definitions")[0].get("example")
+                    if example:
+                        print(f"Example: {example}\n")
                     else:
-                        example = f"Example: {example}"
+                        print("No example found\n")
 
-                    print(f"{definition}\n{example}\n")
+                #Load ALL definitions
+                else:
+                    print("\nDefinitions:\n")
+                    definitions = data[0].get("meanings")
+                
+                    for entry in definitions:
+                        #Load definitions and examples
+                        definition = entry.get("definitions")[0].get("definition")
+                        example = entry.get("definitions")[0].get("example")
+                    
+                        #If no example is present then we will simply say that there is no example available for that particular definition
+                        if not example:
+                            example = "No example found"
+                    
+                        #If there is an example then we insert the text "example" before it
+                        else:
+                            example = f"Example: {example}"
 
-        #If a definition isn't found then tell the user
-        except Exception as e:
-            print(f"Could not find a definition for \'{word}\'\n")
+                        print(f"{definition}\n{example}\n")
+
+            #If a definition isn't found then tell the user
+            except Exception as e:
+                print(f"Could not find a definition for \'{word}\'\n")
+
+        #If the word is empty but an option has been specified then there is nothing to search for. Show usage instructions instead.
+        else:
+            print("\nUsage: gd <word> <options>\nuse \'--help\' to show available commands\n")
 
 else:
     #Show some info about this program and how to use it
