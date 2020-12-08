@@ -2,14 +2,14 @@
 import json
 from sys import argv as args
 from urllib.request import urlopen
-version = "1.3b"
+version = "1.3c"
 build_date = "Dec 08 2020"
 
 if len(args) >= 2:
 
     #Show patch notes
     if args[1].lower() == "--patch-notes":
-        patch_notes = ["+ Added help message for when the word is empty but there is an option present"]
+        patch_notes = ["* Fixed a bug where options could be inputted into the search query"]
 
         print(f"\nNew in gd version {version} ({build_date}):")
         for note in patch_notes:
@@ -46,12 +46,10 @@ if len(args) >= 2:
         #Doesn't seem to have any entries for words or phrases with spaces
         #in them so this feature might get removed in the future.
         word = ""
+
         for i in range(1, len(args)):
-            if (i+1) < len(args) and "--" not in args[i+1]:
+            if "--" not in args[i]:
                 word += f"{args[i]} "
-            else:
-                if "--" not in args[i]: #Remove options from the query
-                    word += f"{args[i]}"
 
         word = word.rstrip() #Remove trailing whitespace
         word = word.lstrip() #Remove leading whitespace
