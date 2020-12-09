@@ -2,14 +2,15 @@
 import json
 from sys import argv as args
 from urllib.request import urlopen
-version = "1.3c"
-build_date = "Dec 08 2020"
+version = "1.3d"
+build_date = "Dec 09 2020"
+usage = "Usage: gd <command> OR gd <word> <options>,\nuse \'--help\' to show available commands\n"
 
 if len(args) >= 2:
 
     #Show patch notes
     if args[1].lower() == "--patch-notes":
-        patch_notes = ["* Fixed a bug where options could be inputted into the search query"]
+        patch_notes = ["+ Added clarification regarding application use", "+ Added message for when searching for all definitions"]
 
         print(f"\nNew in gd version {version} ({build_date}):")
         for note in patch_notes:
@@ -55,12 +56,15 @@ if len(args) >= 2:
         word = word.lstrip() #Remove leading whitespace
 
         showAll = False
+        allMessage = "" #Message that will change the default "Looking up <word>" into "Looking up ALL DEFINITIONS FOR <word>"
         if "--all" in args: #Enable the display of ALL definitions
             showAll = True
+            allMessage = "all definitions for "
+
 
         #Make sure that the word isn't empty
         if len(word) > 0:
-            print(f"\nLooking up \'{word}\'...")
+            print(f"\nLooking up {allMessage}\'{word}\'...")
 
             try:
                 #Get the raw JSON data from the API
@@ -104,10 +108,10 @@ if len(args) >= 2:
 
         #If the word is empty but an option has been specified then there is nothing to search for. Show usage instructions instead.
         else:
-            print("\nUsage: gd <word> <options>\nuse \'--help\' to show available commands\n")
+            print(f"\n{usage}")
 
 else:
     #Show some info about this program and how to use it
     print(f"\n[v{version} - {build_date}, Python v3.8.5]")
-    print("gd - Unofficial Google Dictionary, based on https://dictionaryapi.dev/\ngd written by Weeaboo420, use \'--patch-notes\' for additional information\n\nuse \'--help\' to show available commands\n")
-    print("Usage: gd <word> <options>\n")
+    print("gd - Unofficial Google Dictionary, based on https://dictionaryapi.dev/\ngd written by Weeaboo420, use \'--patch-notes\' for additional information\n")
+    print(f"{usage}")
