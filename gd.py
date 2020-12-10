@@ -2,15 +2,15 @@
 import json
 from sys import argv as args
 from urllib.request import urlopen
-version = "1.3d"
-build_date = "Dec 09 2020"
+version = "1.4"
+build_date = "Dec 10 2020"
 usage = "Usage: gd <command> OR gd <word> <options>,\nuse \'--help\' to show available commands\n"
 
 if len(args) >= 2:
 
     #Show patch notes
     if args[1].lower() == "--patch-notes":
-        patch_notes = ["+ Added clarification regarding application use", "+ Added message for when searching for all definitions"]
+        patch_notes = ["* Fixed support for spaces in search queries."]
 
         print(f"\nNew in gd version {version} ({build_date}):")
         for note in patch_notes:
@@ -66,6 +66,16 @@ if len(args) >= 2:
         if len(word) > 0:
             print(f"\nLooking up {allMessage}\'{word}\'...")
 
+            #Convert space characters into characters that can be read properly as a URL
+            parsedWord = ""
+            for char in word:
+                if char == " ":
+                    parsedWord += "%20" #Add %20 instead of a space
+                else:
+                    parsedWord += char
+
+            word = parsedWord #Assign the data in parsedWord to word
+
             try:
                 #Get the raw JSON data from the API
                 data = json.loads(urlopen(f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}").read())
@@ -104,7 +114,7 @@ if len(args) >= 2:
 
             #If a definition isn't found then tell the user
             except Exception as e:
-                print(f"Could not find a definition for \'{word}\'\n")
+                print(f"No definition found\n")
 
         #If the word is empty but an option has been specified then there is nothing to search for. Show usage instructions instead.
         else:
